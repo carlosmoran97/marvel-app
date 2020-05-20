@@ -32,10 +32,11 @@ const paginate = ({ types, mapActionToKey }) => {
                     isFetching: true
                 };
             case successType:
+                // Results is an array with the ids of the entities
                 return {
                     ...state,
                     isFetching: false,
-                    ids: union(state.ids, action.response.result),
+                    ids: union(state.ids, action.response.results),
                     nextPageUrl: action.response.nextPageUrl,
                     offset: state.offset + state.limit
                 };
