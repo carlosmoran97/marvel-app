@@ -1,4 +1,4 @@
-import union from 'loadash/union';
+import union from 'lodash/union';
 
 // define a page limit
 const PAGE_LIMIT = 20;
@@ -36,7 +36,7 @@ const paginate = ({ types, mapActionToKey }) => {
                 return {
                     ...state,
                     isFetching: false,
-                    ids: union(state.ids, action.response.results),
+                    ids: union(state.ids, action.response.result),
                     nextPageUrl: action.response.nextPageUrl,
                     offset: state.offset + state.limit
                 };

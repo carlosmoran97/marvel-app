@@ -13,7 +13,7 @@ const getNextPageUrl = response => {
         let { url: baseUrl, query } = queryString.parseUrl(url, config);
         query.offset = offset + limit;
         const queryStr = queryString.stringify(query, config);
-        return baseUrl + queryStr;
+        return `${baseUrl}?${queryStr}`;
     }
     
     return null;
