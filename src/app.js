@@ -3,15 +3,15 @@ import ReactDOM from 'react-dom';
 import 'normalize.css/normalize.css';
 import './styles/style.scss';
 import configureStore from './store/configureStore';
-import { loadCharacters } from './actions';
+import { Provider } from 'react-redux';
+import AppRouter from './routers/AppRouter'
+
 const store = configureStore();
 
-const template = (
-    <>
-        <h1>Hola mundo</h1>
-        <button onClick={()=>{
-            store.dispatch(loadCharacters("Spider", [], [], true));
-        }}>Load</button>
-    </>
+const jsx =  (
+    <Provider store={store}>
+        <AppRouter />
+    </Provider>
 );
-ReactDOM.render(template, document.getElementById('app'));
+
+ReactDOM.render(jsx, document.getElementById('app'));

@@ -36,10 +36,10 @@ export const loadCharacters = (name, comics, stories, nextPage) => (dispatch, ge
         return null;
     }
 
-    console.log(nextPageUrl);
-
     return dispatch(fetchCharacters(query, nextPageUrl));
 };
+
+export const CHARACTER_DETAIL_REQUEST = 'CHARACTER_DETAIL_REQUEST';
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
