@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash/object';
 import queryString from 'query-string';
 import { loadCharacters } from './../../actions';
+import { Link } from 'react-router-dom';
 
 export default function CharactersGrid({ params }) {
 
@@ -26,11 +27,13 @@ export default function CharactersGrid({ params }) {
                 return (
                     <div key={id}>
                         <p>{character.name}</p>
-                        <img
-                            src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                            alt={`${character.name} image`}
-                            height={300}
-                        />
+                        <Link to={`/characters/${id}`}>
+                            <img
+                                src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
+                                alt={`${character.name} image`}
+                                height={300}
+                            />
+                        </Link>
                     </div>
                 );
             })}

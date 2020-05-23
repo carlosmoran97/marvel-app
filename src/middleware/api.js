@@ -13,6 +13,7 @@ const getNextPageUrl = response => {
         let { url: baseUrl, query } = queryString.parseUrl(url, config);
         query.offset = offset + limit;
         const queryStr = queryString.stringify(query, config);
+        console.log(`${baseUrl}?${queryStr}`);
         return `${baseUrl}?${queryStr}`;
     }
     
@@ -25,6 +26,7 @@ const API_ROOT = process.env.MARVEL_API_URL;
 // This makes every API response have the same shape.
 export const callApi = (endpoint, schema) => {
     const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
+    
     return axios.get(fullUrl).then(response => {
         const nextPageUrl = getNextPageUrl(response);
         return Object.assign({},

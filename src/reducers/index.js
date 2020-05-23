@@ -41,6 +41,14 @@ const pagination = combineReducers({
             ActionTypes.COMICS_FAILURE
         ],
     }),
+    characterComics: paginate({
+        mapActionToKey: action => action.query,
+        types: [
+            ActionTypes.CHARACTER_COMICS_REQUEST,
+            ActionTypes.CHARACTER_COMICS_SUCCESS,
+            ActionTypes.CHARACTER_COMICS_FAILURE
+        ],
+    }),
 });
 
 const rootReducer = combineReducers({

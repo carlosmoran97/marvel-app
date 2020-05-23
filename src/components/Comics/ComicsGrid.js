@@ -17,7 +17,6 @@ export default function ComicsGrid({params}) {
     const handleLoadMore = () => {
         dispatch( loadComics(params.titleStartsWith, params.format, params.issueNumber, nextPageUrl !== null ) );
     };
-    console.log(comicsIds);
     return (
         <div>
             {comicsIds.map(id => {
