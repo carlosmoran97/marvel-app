@@ -95,6 +95,30 @@ export const CHARACTER_STORIES_SUCCESS = 'CHARACTER_STORIES_SUCCESS';
 export const CHARACTER_STORIES_FAILURE = 'CHARACTER_STORIES_FAILURE';
 
 // Fetches a page of character's stories
+// Relies on the custom API middleware defined in ../middleware/api.js
+const fetchCharacterStories = (query, nextPageUrl) => ({
+    query,
+    [CALL_API]: {
+        types: [ CHARACTER_STORIES_REQUEST, CHARACTER_STORIES_SUCCESS, CHARACTER_STORIES_FAILURE ],
+        endpoint: nextPageUrl,
+        schema: Schemas.STORY_ARRAY
+    },
+});
+
+// Fetches a page of character's stories unless it is cached and user didn't specifically request next page.
+// Relies on Redux Thunl middleware
+export const loadCharacterStories = (id, nextPage) => (dispatch, getState) => {
+    const {
+        nextPageUrl = `characters/${id}/stories?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        offset = 0
+    } = getState().pagination.characterStories[id.toString()] || {};
+
+    if(offset > 0 && !nextPage) {
+        return null;
+    }
+
+    return dispatch( fetchCharacterStories(id.toString(), nextPageUrl) );
+};
 // Comics search
 
 export const COMICS_REQUEST = 'COMICS_REQUEST';

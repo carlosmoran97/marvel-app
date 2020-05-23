@@ -55,7 +55,7 @@ export const Schemas = {
     COMIC: comicSchema,
     COMIC_ARRAY: [comicSchema],
     STORY: storySchema,
-    STORY_SCHEMA: [storySchema],
+    STORY_ARRAY: [storySchema],
 };
 
 // Action key that carries API call info interpreted by this Redux middleware

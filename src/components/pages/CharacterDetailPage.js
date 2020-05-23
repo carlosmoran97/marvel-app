@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CharacterComics from '../Characters/CharacterComics';
-import { loadCharacter, loadCharacterComics } from '../../actions';
+import CharacterStories from '../Characters/CharacterStories';
+import { loadCharacter, loadCharacterComics, loadCharacterStories } from '../../actions';
 
 export default function CharacterDetailPage(props) {
     const id = props.match.params.id;
@@ -11,6 +12,7 @@ export default function CharacterDetailPage(props) {
     useEffect(() => {
         dispatch( loadCharacter(id) );
         dispatch( loadCharacterComics(id) );
+        dispatch( loadCharacterStories(id) );
     }, [id]);
 
     return (
@@ -25,9 +27,7 @@ export default function CharacterDetailPage(props) {
                 <p>{character.description}</p>
                 <div className="character__relatedEntities">
                     <CharacterComics id={character.id} />
-                    <div className="character__stories">
-                        <h2>Stories</h2>
-                    </div>
+                    <CharacterStories id={character.id} />
                 </div>
             </div>)}
         </div>
