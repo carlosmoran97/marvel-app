@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash/object';
 import queryString from 'query-string';
 import { loadCharacters } from './../../actions';
-import { Link } from 'react-router-dom';
+import CharacterGridItem from './CharacterGridItem';
 
 export default function CharactersGrid({ params }) {
 
@@ -25,16 +25,7 @@ export default function CharactersGrid({ params }) {
             {charactersIds.map(id => {
                 const character = characters[id];
                 return (
-                    <div key={id}>
-                        <p>{character.name}</p>
-                        <Link to={`/characters/${id}`}>
-                            <img
-                                src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                                alt={`${character.name} image`}
-                                height={300}
-                            />
-                        </Link>
-                    </div>
+                    <CharacterGridItem key={id} character={character}/>
                 );
             })}
             { nextPageUrl !== null &&  <button onClick={handleLoadMore}>Load more</button>}

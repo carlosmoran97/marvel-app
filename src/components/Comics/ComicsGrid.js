@@ -4,6 +4,7 @@ import { get } from 'lodash/object';
 import queryString from 'query-string';
 import { loadComics } from '../../actions';
 import { Link } from 'react-router-dom';
+import ComicGridItem from './ComicGridItem';
 
 export default function ComicsGrid({params}) {
     const pagination = useSelector(state=>state.pagination);
@@ -23,16 +24,7 @@ export default function ComicsGrid({params}) {
             {comicsIds.map(id => {
                 const comic = comics[id];
                 return (
-                    <div key={id}>
-                        <p>{comic.title}</p>
-                        <Link to={`/comics/${comic.id}`}>
-                            <img
-                                src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                                alt={`${comic.name} image`}
-                                height={300}
-                            />
-                        </Link>
-                    </div>
+                    <ComicGridItem key={`comic-${id}`} comic={comic}/>
                 );
             })}
             { nextPageUrl !== null &&  <button onClick={handleLoadMore}>Load more</button>}

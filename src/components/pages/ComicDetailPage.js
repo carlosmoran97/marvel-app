@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ComicCharacters from '../Comics/ComicCharacters';
 import ComicStories from '../Comics/ComicStories';
-import { loadComic, loadComicCharacters, loadComicStories } from '../../actions';
+import { loadComic, loadComicCharacters, loadComicStories, toggleComic } from '../../actions';
 
 export default function ComicDetailPage(props) {
     const id = props.match.params.id;
@@ -15,10 +15,16 @@ export default function ComicDetailPage(props) {
         dispatch( loadComicStories( id ) );
     },[id]);
 
+    const isFavorite = useSelector(state => state.favorites.comics.includes(parseInt(id)));
+    const toggleFavorite = () => {
+        dispatch(toggleComic(parseInt(id)));
+    };
+
     return (
         <div>
             {comic && (<div>
                 <h1>{comic.title}</h1>
+                <button onClick={toggleFavorite}>{isFavorite ? "Remove" : "Add"}</button>
                 <img
                     src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
                     alt={`${comic.name} image.`}

@@ -244,9 +244,101 @@ export const loadComicStories = (id, nextPage) => (dispatch, getState) => {
     return dispatch( fetchComicStories(id.toString(), nextPageUrl) );
 };
 
+export const STORY_DETAIL_REQUEST = 'STORY_DETAIL_REQUEST';
+export const STORY_DETAIL_SUCCESS = 'STORY_DETAIL_SUCCESS';
+export const STORY_DETAIL_FAILURE = 'STORY_DETAIL_FAILURE';
+// Fetches a single Story from Marvel API
+// Relies on the custom API middleware defined in ../middleware.js
+const fetchStory = id => ({
+    [CALL_API]: {
+        types: [ STORY_DETAIL_REQUEST, STORY_DETAIL_SUCCESS, STORY_DETAIL_FAILURE ],
+        endpoint: `stories/${id}?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        schema: Schemas.STORY_ARRAY // An array of one story
+    }
+});
+
+// Fetches a single Story from Marvel API unless it is cached
+// Relies on Redux Thunk middleware
+export const loadStory = id => (dispatch, getState) => {
+    const story = getState().entities.stories[id];
+    if(story) {
+        return null;
+    }
+
+    return dispatch( fetchStory(id) );
+};
+
+// Story's characters
+export const STORY_CHARACTERS_REQUEST = 'STORY_CHARACTERS_REQUEST';
+export const STORY_CHARACTER_SUCCESS = 'STORY_CHARACTERS_SUCCESS';
+export const STORY_CHARACTER_FAILURE = 'STORY_CHARACTER_FAILURE';
+// Fetches a page of story's characters
+const fetchStoryCharacters = (query, nextPageUrl) => ({
+    query,
+    [CALL_API]: {
+        types: [ STORY_CHARACTERS_REQUEST, STORY_CHARACTER_SUCCESS, STORY_CHARACTER_FAILURE ],
+        endpoint: nextPageUrl,
+        schema: Schemas.CHARACTER_ARRAY
+    }
+});
+
+export const loadStoryCharacters = (id, nextPage) => (dispatch, getState) => {
+    const {
+        nextPageUrl = `stories/${id}/characters?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        offset = 0
+    } = getState().pagination.storyCharacters[id.toString()] || {};
+    if(offset > 0 && !nextPage) {
+        return null;
+    }
+
+    return dispatch( fetchStoryCharacters(id.toString(), nextPageUrl) );
+};
+
+// Story's comics 
+export const STORY_COMICS_REQUEST = 'STORY_COMICS_REQUEST';
+export const STORY_COMICS_SUCCESS = 'STORY_COMICS_SUCCESS';
+export const STORY_COMICS_FAILURE = 'STORY_COMICS_FAILURE';
+const fetchStoryComics = (query, nextPageUrl) => ({
+    query,
+    [CALL_API]: {
+        types: [ STORY_COMICS_REQUEST, STORY_COMICS_SUCCESS, STORY_COMICS_FAILURE ],
+        endpoint: nextPageUrl,
+        schema: Schemas.COMIC_ARRAY
+    },
+});
+
+export const loadStoryComics = (id, nextPage) => (dispatch, getState) => {
+    const {
+        nextPageUrl = `stories/${id}/comics?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        offset = 0
+    } = getState().pagination.storyComics[id.toString()] || {};
+    if(offset > 0 && !nextPage) {
+        return null;
+    }
+
+    return dispatch( fetchStoryComics(id.toString(), nextPageUrl) );
+};
+
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
 // Resets the currently visible error message.
 export const resetErrorMessage = () => ({
     type: RESET_ERROR_MESSAGE
-})
+});
+
+// Toggle items from favorites list
+
+export const toggleCharacter = (character) => ({
+    type: 'TOGGLE_CHARACTER',
+    character
+});
+
+export const toggleComic = (comic) => ({
+    type: 'TOGGLE_COMIC',
+    comic
+});
+
+export const toggleStory = (story) => ({
+    type: 'TOGGLE_STORY',
+    story
+});

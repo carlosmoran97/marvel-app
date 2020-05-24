@@ -8,6 +8,7 @@ import CharacterDetailPage from '../components/pages/CharacterDetailPage';
 import ComicsPage from '../components/pages/ComicsPage';
 import ComicDetailPage from '../components/pages/ComicDetailPage';
 import StoryDetailPage from '../components/pages/StoryDetailPage';
+import FavoritesPage from '../components/pages/FavoritesPage';
 
 export default function AppRouter() {
     return (
@@ -21,6 +22,7 @@ export default function AppRouter() {
                 <Route path="/comics" component={ComicsPage} exact/>
                 <Route path="/comics/:id" component={ComicDetailPage} />
                 <Route path="/stories/:id" component={StoryDetailPage} />
+                <Route path="/favorites" component={FavoritesPage}/>
                 <Route component={NotFoundPage} />
             </Switch>
             </div>
