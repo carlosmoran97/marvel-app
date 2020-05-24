@@ -39,7 +39,9 @@ export default function Header() {
                 >
                     <Menu />
                 </IconButton>
-                <Typography variant="h6" noWrap>MarvelApp</Typography>
+                <Typography variant="h6" noWrap>
+                    <Link to="/" style={{color: "white", textDecoration: "none"}}>MarvelApp</Link>
+                </Typography>
             </Toolbar>
         </AppBar>
     )

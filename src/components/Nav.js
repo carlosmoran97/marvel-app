@@ -27,28 +27,35 @@ export default function Nav() {
     const classes = useStyles();
     const theme = useTheme();
     const { mobileOpen, handleDrawerToggle } = useContext(MobileOpenContext);
+    const toggleOnMobileOpen = () => {
+        if(mobileOpen){
+            handleDrawerToggle();
+        }
+    };
     const drawerContent = (
         <div>
-            <div className={classes.toolbar}>
-                
-            </div>
+            <div className={classes.toolbar}/>
             <Divider />
+            
             <List>
                 <ListItemLink 
                     icon={<Person />} 
                     to="/characters"
                     primary="Characters"
+                    onClick={toggleOnMobileOpen}
                 />
                 <ListItemLink 
                     icon={<MenuBook />} 
                     to="/comics"
                     primary="Comics"
+                    onClick={toggleOnMobileOpen}
                 />
                 <Divider />
                 <ListItemLink 
                     icon={<Favorite />} 
                     to="/favorites"
                     primary="Favorites"
+                    onClick={toggleOnMobileOpen}
                 />
             </List>
         </div>

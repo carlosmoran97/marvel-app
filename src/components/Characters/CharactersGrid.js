@@ -6,10 +6,15 @@ import { loadCharacters } from './../../actions';
 import CharacterGridItem from './CharacterGridItem';
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { Button } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1
+    },
+    buttonContainer: {
+        margin: "0 auto",
+        textAlign: "center",
+        marginTop: "20px"
     },
 }));
 
@@ -37,8 +42,14 @@ export default function CharactersGrid({ params }) {
                         <CharacterGridItem key={id} character={character} />
                     );
                 })}
-                {nextPageUrl !== null && <button onClick={handleLoadMore}>Load more</button>}
+                
             </Grid>
+            <div className={classes.buttonContainer}>
+                {nextPageUrl !== null && <Button 
+                    onClick={handleLoadMore}
+                    variant="contained" color="secondary"
+                >Load more</Button>}
+            </div>
         </div>
     )
 }

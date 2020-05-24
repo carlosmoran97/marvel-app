@@ -1,28 +1,77 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { loadCharacterComics } from '../../actions';
 import { get } from 'lodash/object';
+import { ListItem, ListItemText, ListItemAvatar, Typography, Avatar } from "@material-ui/core";
+import history from "../../routers/history";
+import { FixedSizeList } from "react-window";
+import InfiniteLoader from "react-window-infinite-loader";
 
-export default function CharacterComics({id}) {
+export default function CharacterComics({ id }) {
     const pagination = useSelector(state => state.pagination);
     const dispatch = useDispatch();
     const comicsIds = get(pagination, `characterComics[${id}].ids`, []);
     const nextPageUrl = get(pagination, `characterComics[${id}].nextPageUrl`, null);
     const comics = useSelector(state => state.entities.comics);
+    
+    const itemsToRender = [];
+    comicsIds.forEach(id => {
+        itemsToRender.push(comics[id]);
+    });
 
-    const handleLoadMore = () => {
-        dispatch( loadCharacterComics(id, nextPageUrl !== null ) );
+    const renderRow = ({ style, index }) => {
+        const item = itemsToRender[index];
+        return (
+            <ListItem button style={{
+                ...style,
+                backgroundColor: index % 2 === 0 ? 'white' : 'rgba(0,0,0,0.1)'
+            }} key={`comic-${index}`} onClick={() => {
+                history.push(`/comics/${item.id}`);
+            }}>
+                <ListItemAvatar>
+                    <Avatar src={`${item.thumbnail.path}.${item.thumbnail.extension}`} />
+                </ListItemAvatar>
+                <ListItemText
+                    disableTypography
+                    primary={<Typography noWrap>
+                        {`${item.title}`}
+                    </Typography>}
+                />
+            </ListItem>
+        );
     };
 
+    const handleLoadMore = () => {
+        dispatch(loadCharacterComics(id, nextPageUrl !== null));
+    };
+
+    const itemCount = nextPageUrl !== null ? itemsToRender.length + 1 : itemsToRender.length; 
+    
     return (
-        <div className="character__comics">
+        <div>
             <h2>Comics</h2>
-            {comicsIds.map(id => {
-                const comic = comics[id];
-                return <div key={`comic-${id}`}><Link to={`/comics/${id}`}>{comic.title}</Link></div>
-            })}
-            { nextPageUrl !== null &&  <button onClick={handleLoadMore}>Load more</button>}
+            <InfiniteLoader
+                isItemLoaded={index => index < itemsToRender.length}
+                itemCount={itemCount}
+                loadMoreItems={handleLoadMore}
+            >
+                {({ onItemsRendered, ref }) =>(
+                <FixedSizeList
+                    height={50 * Math.min(10, itemsToRender.length)}
+                    width="100%" itemSize={50}
+                    itemCount={itemsToRender.length} style={{
+                        borderRadius: "10px",
+                        border: "1px solid rgba(0,0,0,0.1)"
+                    }}
+                    onItemsRendered={onItemsRendered}
+                    ref={ref}
+                >
+                    {renderRow}
+                </FixedSizeList>)
+                }
+            </InfiniteLoader>
+
         </div>
     );
 }

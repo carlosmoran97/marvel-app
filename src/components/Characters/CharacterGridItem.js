@@ -56,12 +56,3 @@ export default function CharacterGridItem({ character }) {
         </Grid>
     );
 }
-/**
- *<Link to={`/characters/${character.id}`}>
-                <img
-                    src={`${character.thumbnail.path}.${character.thumbnail.extension}`}
-                    alt={`${character.name} image`}
-                    height={300}
-                />
-            </Link>
- */
