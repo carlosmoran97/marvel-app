@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'normalize.css/normalize.css';
 import './styles/style.scss';
 import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
