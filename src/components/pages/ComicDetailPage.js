@@ -4,7 +4,7 @@ import ComicCharacters from '../Comics/ComicCharacters';
 import ComicStories from '../Comics/ComicStories';
 import { loadComic, loadComicCharacters, loadComicStories, toggleComic } from '../../actions';
 // Material ui
-import { Avatar, Grid, Typography, Tab, Tabs, IconButton } from "@material-ui/core";
+import {  Grid, Typography, Tab, Tabs, IconButton } from "@material-ui/core";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import TabPanel from "../TabPanel";
@@ -97,7 +97,7 @@ function ComicTabs({ id }) {
     return (
         <div className={classes.tabRoot}>
 
-            <Tabs value={value} onChange={handleChange} aria-label="comics and stories tabs" className={classes.tabs}>
+            <Tabs value={value} onChange={handleChange} aria-label="characters and stories tabs" className={classes.tabs}>
                 <Tab label="Characters" {...a11yProps(0)} />
                 <Tab label="Stories" {...a11yProps(1)} />
             </Tabs>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { loadComicCharacters } from '../../actions';
 import { get } from 'lodash/object';
 import { ListItem, ListItemText, ListItemAvatar, Typography, Avatar } from "@material-ui/core";
@@ -26,7 +25,7 @@ export default function ComicCharacters({id}) {
             <ListItem button style={{
                 ...style,
                 backgroundColor: index % 2 === 0 ? 'white' : 'rgba(0,0,0,0.1)'
-            }} key={`comic-${index}`} onClick={() => {
+            }} key={`character-${index}`} onClick={() => {
                 history.push(`/characters/${item.id}`);
             }}>
                 <ListItemAvatar>
