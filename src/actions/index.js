@@ -25,7 +25,8 @@ export const loadCharacters = (name, comics, stories, nextPage) => (dispatch, ge
         comics,
         stories
     }, {
-        arrayFormat: 'comma'
+        arrayFormat: 'comma',
+        skipEmptyString: true
     });
 
     const {

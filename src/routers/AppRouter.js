@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import HomePage from '../components/pages/HomePage';
 import CharactersPage from '../components/pages/CharactersPage';
 import NotFoundPage from '../components/pages/NotFoundPage';
@@ -13,6 +13,7 @@ import Header from '../components/Header';
 import { MobileOpenContext } from '../context/mobileOpenContext';
 import { CssBaseline } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import history from "./history";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
+        maxWidth: 1440,
+        margin: "0 auto"
     },
 }));
 
@@ -33,7 +36,7 @@ export default function AppRouter() {
     };
 
     return (
-        <BrowserRouter>
+        <Router history={history}>
             <div className={classes.root}>
                 <CssBaseline />
                 <MobileOpenContext.Provider value={{ mobileOpen, handleDrawerToggle }}>
@@ -56,6 +59,6 @@ export default function AppRouter() {
                 </MobileOpenContext.Provider>
             </div>
 
-        </BrowserRouter >
+        </Router>
     );
 }

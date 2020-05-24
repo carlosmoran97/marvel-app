@@ -4,12 +4,14 @@ import './styles/style.scss';
 import configureStore from './store/configureStore';
 import { Provider } from 'react-redux';
 import AppRouter from './routers/AppRouter'
-
-const store = configureStore();
+import { PersistGate } from 'redux-persist/integration/react';
+const { store, persistor} = configureStore();
 
 const jsx =  (
     <Provider store={store}>
-        <AppRouter />
+        <PersistGate loading={null} persistor={persistor}>
+            <AppRouter />
+        </PersistGate>
     </Provider>
 );
 
