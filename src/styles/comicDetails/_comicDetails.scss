@@ -1,14 +1,12 @@
-.character__relatedEntities {
+.comic__relatedEntities{
     display: flex;
     justify-content: space-around;
 }
-
-.character__comics {
+.comic__characters {
     max-height: 600px;
     overflow: scroll;
 }
-
-.character__stories {
+.comic__stories {
     max-height: 600px;
     overflow: scroll;
 }

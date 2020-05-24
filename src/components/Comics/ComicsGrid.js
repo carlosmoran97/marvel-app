@@ -2,7 +2,8 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { get } from 'lodash/object';
 import queryString from 'query-string';
-import { loadComics } from '../../actions'
+import { loadComics } from '../../actions';
+import { Link } from 'react-router-dom';
 
 export default function ComicsGrid({params}) {
     const pagination = useSelector(state=>state.pagination);
@@ -24,11 +25,13 @@ export default function ComicsGrid({params}) {
                 return (
                     <div key={id}>
                         <p>{comic.title}</p>
-                        <img
-                            src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
-                            alt={`${comic.name} image`}
-                            height={300}
-                        />
+                        <Link to={`/comics/${comic.id}`}>
+                            <img
+                                src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
+                                alt={`${comic.name} image`}
+                                height={300}
+                            />
+                        </Link>
                     </div>
                 );
             })}

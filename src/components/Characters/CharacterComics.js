@@ -20,7 +20,7 @@ export default function CharacterComics({id}) {
             <h2>Comics</h2>
             {comicsIds.map(id => {
                 const comic = comics[id];
-                return <div key={`comic-${comic.id}`}><Link to={`/comics/${comic.id}`}>{comic.title}</Link></div>
+                return <div key={`comic-${id}`}><Link to={`/comics/${id}`}>{comic.title}</Link></div>
             })}
             { nextPageUrl !== null &&  <button onClick={handleLoadMore}>Load more</button>}
         </div>

@@ -106,7 +106,7 @@ const fetchCharacterStories = (query, nextPageUrl) => ({
 });
 
 // Fetches a page of character's stories unless it is cached and user didn't specifically request next page.
-// Relies on Redux Thunl middleware
+// Relies on Redux Thunk middleware
 export const loadCharacterStories = (id, nextPage) => (dispatch, getState) => {
     const {
         nextPageUrl = `characters/${id}/stories?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
@@ -159,6 +159,89 @@ export const loadComics = (titleStartsWith, format, issueNumber, nextPage) => (d
     }
 
     return dispatch(fetchComics(query, nextPageUrl));
+};
+
+export const COMIC_DETAIL_REQUEST = 'COMIC_DETAIL_REQUEST';
+export const COMIC_DETAIL_SUCCESS = 'COMIC_DETAIL_SUCCESS';
+export const COMIC_DETAIL_FAILURE = 'COMIC_DETAIL_FAILURE';
+// Fetches a single comic from Marvel API
+// Relies on the custom API middleware defined in ../middleware/api.js
+const fetchComic = id => ({
+    [CALL_API]: {
+        types: [ COMIC_DETAIL_REQUEST, COMIC_DETAIL_SUCCESS, COMIC_DETAIL_FAILURE ],
+        endpoint: `comics/${id}?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        schema: Schemas.COMIC_ARRAY // An array of one comic
+    }
+});
+
+// Fetches a single comic from Marvel API unless it is cached
+// Relies on Redux Thunk middleware
+export const loadComic = id => (dispatch, getState) => {
+    const comic = getState().entities.comics[id];
+    if(comic) {
+        return null;
+    }
+
+    return dispatch( fetchComic(id) );
+};
+
+// Comic's characters
+export const COMIC_CHARACTERS_REQUEST = 'COMIC_CHARACTERS_REQUEST';
+export const COMIC_CHARACTERS_SUCCESS = 'COMIC_CHARACTERS_SUCCESS';
+export const COMIC_CHARACTERS_FAILURE = 'COMIC_CHARACTERS_FAILURE';
+// Fetches a page of comic's characters
+// Relies on the custom API middleware defined in ../middleware/api.js
+const fetchComicCharacters = (query, nextPageUrl) => ({
+    query,
+    [CALL_API]: {
+        types: [ COMIC_CHARACTERS_REQUEST, COMIC_CHARACTERS_SUCCESS, COMIC_CHARACTERS_FAILURE ],
+        endpoint: nextPageUrl,
+        schema: Schemas.CHARACTER_ARRAY,
+    },
+});
+
+// Fetches a page of comic's characters unless it is cacged and user didn't specifically request next page.
+// Relies on Redux Thunk middleware
+export const loadComicCharacters = (id, nextPage) => (dispatch, getState) => {
+    const {
+        nextPageUrl = `comics/${id}/characters?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        offset = 0
+    } = getState().pagination.comicCharacters[id.toString()] || {};
+    if(offset > 0 && !nextPage) {
+        return null;
+    }
+
+    return dispatch( fetchComicCharacters(id.toString(), nextPageUrl) );
+};
+// Comic's stories
+export const COMIC_STORIES_REQUEST = 'COMIC_STORIES_REQUEST';
+export const COMIC_STORIES_SUCCESS = 'COMIC_STORIES_SUCCESS';
+export const COMIC_STORIES_FAILURE = 'COMIC_STORIES_FAILURE';
+
+// Fetches a single page of comic's characters
+// Relies on the custom API middleware defined in ../middleware/api.js
+const fetchComicStories = (query, nextPageUrl) => ({
+    query,
+    [CALL_API]: {
+        types: [ COMIC_STORIES_REQUEST, COMIC_STORIES_SUCCESS, COMIC_STORIES_FAILURE ],
+        endpoint: nextPageUrl,
+        schema: Schemas.STORY_ARRAY
+    },
+});
+
+// Fetches a page of comic's stories unless it is cached and user didn't specifically request next page
+// Relies on Redux Thunk middleware
+
+export const loadComicStories = (id, nextPage) => (dispatch, getState) => {
+    const {
+        nextPageUrl = `comics/${id}/stories?apikey=${process.env.MARVEL_PUBLIC_KEY}`,
+        offset = 0
+    } = getState().pagination.comicStories[id.toString()] || {};
+    if(offset > 0 && !nextPage) {
+        return null;
+    }
+
+    return dispatch( fetchComicStories(id.toString(), nextPageUrl) );
 };
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
