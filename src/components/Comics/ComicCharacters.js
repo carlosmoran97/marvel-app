@@ -27,7 +27,7 @@ export default function ComicCharacters({id}) {
                 ...style,
                 backgroundColor: index % 2 === 0 ? 'white' : 'rgba(0,0,0,0.1)'
             }} key={`comic-${index}`} onClick={() => {
-                history.push(`/comics/${item.id}`);
+                history.push(`/characters/${item.id}`);
             }}>
                 <ListItemAvatar>
                     <Avatar src={`${item.thumbnail.path}.${item.thumbnail.extension}`} />

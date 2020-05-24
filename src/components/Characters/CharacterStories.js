@@ -42,7 +42,7 @@ export default function CharacterStories({ id }) {
     };
 
     return (
-        <div className="character__stories">
+        <div>
             <h2>Stories</h2>
             <InfiniteLoader
                 isItemLoaded={index => index < itemsToRender.length}
