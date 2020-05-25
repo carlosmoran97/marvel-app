@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Alert, Autocomplete } from "@material-ui/lab";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
@@ -15,6 +15,8 @@ import {
     Chip,
     Paper
 } from "@material-ui/core";
+import useDebounce from '../../utils/use-debounce';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -38,33 +40,52 @@ const useStyles = makeStyles((theme) => ({
 export default function CharacterAdvancedSearchForm({ open, handleSubmit, handleClose }) {
     const classes = useStyles();
     const theme = useTheme();
+    // Terminos de busqueda y resultados para comic
     const [comicSearch, setComicSearch] = React.useState([]);
-    const [storySearch, setStorySearch] = React.useState([]);
+    const [comicSearchTerm, setComicSearchTerm] = React.useState('');
+    const debouncedSearchTerm = useDebounce(comicSearchTerm, 500);
+
+   
+    useEffect(()=>{
+        if(debouncedSearchTerm){
+            searchComics(debouncedSearchTerm).then(results => {
+                setComicSearch(results);
+            });
+        }
+    },[debouncedSearchTerm]);
+    
+
     const formik = useFormik({
         initialValues: {
             nameStartsWith: '',
             comics: [],
-            stories: [],
+            stories: '',
         },
         onSubmit: (values) => {
-            //handleSubmit(values);
-            console.log(values);
+            
+            const result = {
+                ...values,
+                comics: values.comics.map(comic => comic.id)
+            };
+            handleSubmit(result);
             handleClose();
         },
         validationSchema: Yup.object({
-            nameStartsWith: Yup.string().required()
+            nameStartsWith: Yup.string(),
+            comics: Yup.array(),
+            stories: Yup.number()
         })
     });
     const handleDeleteComic = (comic) => () => {
         // ID
         formik.setFieldValue('comics', formik.values.comics.filter(
-            c => c.title !== comic.title
+            c => c.id !== comic.id
         ));
     };
     const handleDeleteStory = (story) => () => {
         // ID
         formik.setFieldValue('story', formik.values.stories.filter(
-            s => s.title !== story.title
+            s => s.id !== story.id
         ));
     };
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -110,15 +131,14 @@ export default function CharacterAdvancedSearchForm({ open, handleSubmit, handle
                         onInputChange={(event) => {
                             if (typeof event.target.value !== 'number') {
                                 // Search
-                                console.log(event.target.value);
+                                setComicSearchTerm(event.target.value)
                             }
                         }}
                     />
                     <Paper component="ul" className={classes.chipArray}>
                         {formik.values.comics.length === 0 && <p>No comics selected</p>}
                         {formik.values.comics.map(comic => {
-                            //return <li key={`comic-${comic.id}`}>
-                            return <li key={`comic-${Math.random()}`}>
+                            return <li key={`comic-${comic.id}`}>
                                 <Chip
                                     label={comic.title}
                                     className={classes.chip}
@@ -130,42 +150,15 @@ export default function CharacterAdvancedSearchForm({ open, handleSubmit, handle
                     {(formik.errors.titleStartsWith && formik.touched.titleStartsWith) && (
                         <Alert variant="filled" severity="error">{formik.errors.titleStartsWith}</Alert>
                     )}
-                    <Autocomplete
-                        id="story-box"
-                        options={storySearch}
-                        getOptionLabel={(option) => option.title}
-                        style={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Story" variant="outlined" />}
-                        onChange={(event, newValue) => {
-                            const { length } = formik.values.stories.filter(
-                                s => s.title !== story.title
-                            );
-                            if (newValue !== null) {
-                                if (length === 0) {
-                                    formik.setFieldValue('stories', [...formik.values.stories, newValue]);
-                                }
-                            }
-                        }}
-                        onInputChange={(event) => {
-                            if (typeof event.target.value !== 'number') {
-                                // Search
-                                console.log(event.target.value);
-                            }
-                        }}
+                    <TextField
+                        name="stories"
+                        type="number"
+                        label="Story ID"
+                        onChange={formik.handleChange}
+                        value={formik.values.stories}
+                        variant="outlined"
+                        autoComplete="off"
                     />
-                    <Paper component="ul" className={classes.chipArray}>
-                        {formik.values.stories.length === 0 && <p>No stories selected</p>}
-                        {formik.values.stories.map(story => {
-                            //return <li key={`comic-${comic.id}`}>
-                            return <li key={`story-${Math.random()}`}>
-                                <Chip
-                                    label={story.title}
-                                    className={classes.chip}
-                                    onDelete={handleDeleteStory(story)}
-                                />
-                            </li>;
-                        })}
-                    </Paper>
                 </FormGroup>
             </DialogContent>
             <DialogActions>
@@ -178,4 +171,19 @@ export default function CharacterAdvancedSearchForm({ open, handleSubmit, handle
             </DialogActions>
         </Dialog>
     )
+}
+
+const apikey = process.env.MARVEL_PUBLIC_KEY;
+const baseUrl = process.env.MARVEL_API_URL;
+
+function searchComics(search){
+    return axios
+        .get(`${baseUrl}comics?apikey=${apikey}&titleStartsWith=${search}&orderBy=issueNumber`)
+        .then(r => r.data.data.results);
+}
+
+function searchStories(search){
+    return axios
+        .get(`${baseUrl}stories?apikey=${apikey}&titleStartsWith=${search}`)
+        .then(r => r.data.data.results);
 }
