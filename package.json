@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "webpack-dev-server",
     "build:dev": "webpack",
-    "build:prod": "webpack -p --env production",
+    "build": "webpack -p --env production",
     "start": "node server/server.js"
   },
   "author": "Carlos Moran",

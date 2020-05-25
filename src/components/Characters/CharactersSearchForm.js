@@ -1,9 +1,11 @@
-import React from 'react'
-import { Formik, Form, Field, FieldArray } from 'formik';
+import React, { useState } from 'react'
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Paper, InputBase, Divider, IconButton } from "@material-ui/core";
 import { Search, FilterList } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import CharacterAdvancedSearchForm from './CharacterAdvancedSearchForm';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         padding: '12px 16px',
@@ -27,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 export default function CharactersSearchForm({ handleSubmit, handleClear }) {
     const classes = useStyles();
+    const [open, setOpen] = useState(false);
     return (
+        <div>
         <Formik
             initialValues={{
                 nameStartsWith: '',
@@ -56,7 +60,9 @@ export default function CharactersSearchForm({ handleSubmit, handleClear }) {
                         <Search />
                     </IconButton>
                     <Divider className={classes.divider} orientation="vertical" />
-                    <IconButton className={classes.iconButton} aria-label="directions">
+                    <IconButton className={classes.iconButton} aria-label="directions" onClick={()=>{
+                        setOpen(true);
+                    }}>
                         <FilterList />
                     </IconButton>
                 </Paper>
@@ -65,6 +71,10 @@ export default function CharactersSearchForm({ handleSubmit, handleClear }) {
                 )}
                 
         </Formik>
+        <CharacterAdvancedSearchForm open={open} handleSubmit={handleSubmit} handleClose={()=>{
+            setOpen(false);
+        }}/>
+        </div>
     )
 }
 /*
