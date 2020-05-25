@@ -14,6 +14,7 @@ import { MobileOpenContext } from '../context/mobileOpenContext';
 import { CssBaseline } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import history from "./history";
+import ErrorMessage from "../components/ErrorMessage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -42,6 +43,7 @@ export default function AppRouter() {
                 <MobileOpenContext.Provider value={{ mobileOpen, handleDrawerToggle }}>
                     <Header />
                     <Nav />
+                    <ErrorMessage />
                     <main className={classes.content}>
                         <div className={classes.toolbar} />
                         <Switch>
