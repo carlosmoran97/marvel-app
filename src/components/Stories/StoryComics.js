@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { loadStoryComics } from '../../actions';
 import { get } from 'lodash/object';
 import { ListItem, ListItemText, ListItemAvatar, Typography, Avatar } from "@material-ui/core";
