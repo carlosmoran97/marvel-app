@@ -7,6 +7,8 @@ import CharacterGridItem from './CharacterGridItem';
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import { LinearProgress } from "@material-ui/core";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1
@@ -15,6 +17,13 @@ const useStyles = makeStyles((theme) => ({
         margin: "0 auto",
         textAlign: "center",
         marginTop: "20px"
+    },
+    loader: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+        },
     },
 }));
 
@@ -33,8 +42,18 @@ export default function CharactersGrid({ params }) {
         dispatch(loadCharacters(params.nameStartsWith, params.comics, params.stories, nextPageUrl !== null));
     };
 
+    const isFetching = useSelector(state => get(state.pagination.charactersSearch, `[${paramsString}].isFetching`, true));
+
     return (
         <div className={classes.root}>
+            {(charactersIds.length === 0 && isFetching) && 
+                <div className={classes.loader}>
+                    <LinearProgress />
+                </div>
+            }
+            {(charactersIds.length === 0 && !isFetching) &&<h1>
+                Nothing found here  
+            </h1>}
             <Grid container spacing={3}>
                 {charactersIds.map(id => {
                     const character = characters[id];

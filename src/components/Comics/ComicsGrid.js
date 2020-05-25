@@ -8,6 +8,7 @@ import ComicGridItem from './ComicGridItem';
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import { LinearProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
         margin: "0 auto",
         textAlign: "center",
         marginTop: "20px"
+    },
+    loader: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+            marginBottom: theme.spacing(2),
+        },
     },
 }));
 
@@ -34,8 +42,19 @@ export default function ComicsGrid({ params }) {
     const handleLoadMore = () => {
         dispatch(loadComics(params.titleStartsWith, params.format, params.issueNumber, nextPageUrl !== null));
     };
+
+    const isFetching = useSelector(state => get(state.pagination.comicsSearch, `[${paramsString}].isFetching`, true));
+
     return (
         <div className={classes.root}>
+            {(comicsIds.length === 0 && isFetching) && 
+                <div className={classes.loader}>
+                    <LinearProgress />
+                </div>
+            }
+            {(comicsIds.length === 0 && !isFetching) &&<h1>
+                Nothing found here  
+            </h1>}
             <Grid container spacing={3}>
                 {comicsIds.map(id => {
                     const comic = comics[id];

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import ComicsGrid from '../Comics/ComicsGrid';
 import ComicsSearchForm from '../Comics/ComicsSearchForm';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loadComics } from '../../actions';
 import queryString from 'query-string';
 import history from "../../routers/history";
@@ -35,6 +35,7 @@ export default function ComicsPage(props) {
     return (
         <div>
             <ComicsSearchForm handleSubmit={handleSubmit} handleClear={handleClear} />
+            {}
             <ComicsGrid params={{
                 titleStartsWith,
                 format,

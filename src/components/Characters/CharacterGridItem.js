@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: red[500]
     },
+    link: {
+        color: 'black',
+        textDecoration: 'none'
+    },
 }));
 
 export default function CharacterGridItem({ character }) {
@@ -41,7 +45,7 @@ export default function CharacterGridItem({ character }) {
                             {isFavorite ? <Favorite /> : <FavoriteBorder />}
                         </IconButton>
                     }
-                    title={character.name}
+                    title={<Link to={`/characters/${character.id}` } className={classes.link}>{character.name}</Link>}
                 />
                 <CardActionArea onClick={()=>{
                     history.push(`/characters/${character.id}`);

@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ComicCharacters from '../Comics/ComicCharacters';
 import ComicStories from '../Comics/ComicStories';
-import { loadComic, loadComicCharacters, loadComicStories, toggleComic } from '../../actions';
+import { loadComic, loadComicCharacters, loadComicStories, toggleComic, } from '../../actions';
 // Material ui
-import {  Grid, Typography, Tab, Tabs, IconButton } from "@material-ui/core";
+import { Grid, Typography, Tab, Tabs, IconButton, LinearProgress } from "@material-ui/core";
 import { Favorite, FavoriteBorder } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import TabPanel from "../TabPanel";
@@ -32,7 +32,10 @@ const useStyles = makeStyles((theme) => ({
             width: '100%',
             backgroundColor: '#635ee7',
         },
-    }
+    },
+    image: {
+        maxWidth: "100%"
+    },
 }));
 
 export default function ComicDetailPage(props) {
@@ -63,6 +66,7 @@ export default function ComicDetailPage(props) {
                                 src={`${comic.thumbnail.path}.${comic.thumbnail.extension}`}
                                 alt={`${comic.title} image.`}
                                 height={400}
+                                className={classes.image}
                             />
                         </Grid>
                         <Grid item xs={12} lg={9}>

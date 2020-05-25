@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     avatar: {
         backgroundColor: red[500]
     },
+    link: {
+        color: 'black',
+        textDecoration: 'none'
+    },
 }));
 
 
@@ -42,7 +46,7 @@ export default function ComicGridItem({ comic }) {
                             {isFavorite ? <Favorite /> : <FavoriteBorder />}
                         </IconButton>
                     }
-                    title={comic.title}
+                    title={<Link to={`/comics/${comic.id}` } className={classes.link}>{comic.title}</Link>}
                 />
                 <CardActionArea onClick={()=>{
                     history.push(`/comics/${comic.id}`);
