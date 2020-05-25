@@ -1,36 +1,46 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import CharactersGrid from '../Characters/CharactersGrid';
 import { useDispatch } from 'react-redux';
 import { loadCharacters } from './../../actions';
 import CharactersSearchForm from '../Characters/CharactersSearchForm';
+import queryString from 'query-string';
+import history from "../../routers/history";
 
-export default function CharactersPage() {
-
+export default function CharactersPage(props) {
     const dispatch = useDispatch();
-    const initialState ={
-        nameStartsWith: undefined,
-        stories: [],
-        comics: []
-    };
-    let [params, setParams] = useState(initialState);
+    const {
+        nameStartsWith = undefined,
+        stories = [],
+        comics = []
+    } = queryString.parse(props.location.search, {
+        arrayFormat: "comma"
+    });
 
     useEffect(() => {
-        dispatch(loadCharacters(params.nameStartsWith, params.comics, params.stories));
+        dispatch(loadCharacters(nameStartsWith, comics, stories));
     });
 
     const handleSubmit = (values) => {
-        setParams(values);
+        const query = queryString.stringify(values, {
+            arrayFormat: 'comma',
+            skipEmptyString: true
+        });
+        history.push(`/characters${query !== '' ? `?${query}` : ''}`);
     };
 
     const handleClear = () => {
-        setParams(initialState);
+        history.push(`/characters`);
     };
 
 
     return (
         <div>
             <CharactersSearchForm handleSubmit={handleSubmit} handleClear={handleClear}/>
-            <CharactersGrid params={params}/>
+            <CharactersGrid params={{
+                nameStartsWith,
+                stories,
+                comics
+            }}/>
         </div>
     )
 }

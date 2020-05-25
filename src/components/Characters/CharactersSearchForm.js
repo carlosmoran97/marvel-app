@@ -42,7 +42,8 @@ export default function CharactersSearchForm({ handleSubmit, handleClear }) {
             })}
         >
             {({ errors, touched, handleSubmit, values, handleChange, submitForm }) => (
-                <Paper component="form" className={classes.root}>
+                <div>
+                <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
                     
                     <InputBase
                         className={classes.input}
@@ -59,8 +60,10 @@ export default function CharactersSearchForm({ handleSubmit, handleClear }) {
                         <FilterList />
                     </IconButton>
                 </Paper>
+                {(errors.nameStartsWith && touched.nameStartsWith) && <p>{errors.nameStartsWith}</p>}
+                </div>
                 )}
-
+                
         </Formik>
     )
 }

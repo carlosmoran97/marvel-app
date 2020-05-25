@@ -58,6 +58,11 @@ module.exports = (env) => {
                         }
                       }
                 ],
+            }, {
+                test: /\.(png|svg|jpe?g|gif)$/,
+                use: [
+                    'file-loader'
+                ] 
             }]
         },
         devtool: isProduction ? 'source-map' : 'cheap-module-eval-source-map',

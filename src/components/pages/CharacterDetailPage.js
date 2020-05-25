@@ -58,7 +58,6 @@ export default function CharacterDetailPage(props) {
 
     return (
         <div className={classes.container}>
-            {!character && <div>Loading...</div>}
             {character && (<div>
                 <div className={classes.detailHeader}>
                     <Grid container spacing={3}>

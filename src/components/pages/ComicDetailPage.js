@@ -55,7 +55,6 @@ export default function ComicDetailPage(props) {
 
     return (
         <div className={classes.container}>
-            {!comic && <div>Loading...</div>}
             {comic && (<div>
                 <div className={classes.detailHeader}>
                     <Grid container spacing={3}>

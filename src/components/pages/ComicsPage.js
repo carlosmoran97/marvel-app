@@ -3,32 +3,43 @@ import ComicsGrid from '../Comics/ComicsGrid';
 import ComicsSearchForm from '../Comics/ComicsSearchForm';
 import { useDispatch } from 'react-redux';
 import { loadComics } from '../../actions';
+import queryString from 'query-string';
+import history from "../../routers/history";
 
-export default function ComicsPage() {
+export default function ComicsPage(props) {
     const dispatch = useDispatch();
-    const initialState = {
-        titleStartsWith: undefined,
-        format: undefined,
-        issueNumber: undefined,
-    };
-    let [params, setParams] = useState(initialState);
+    const {
+        titleStartsWith = undefined,
+        format = undefined,
+        issueNumber = undefined,
+    } = queryString.parse(props.location.search, {
+        arrayFormat: "comma"
+    });
 
-    useEffect(()=>{
-        dispatch(loadComics(params.titleStartsWith, params.format, params.issueNumber));
+    useEffect(() => {
+        dispatch(loadComics(titleStartsWith, format, issueNumber));
     });
 
     const handleSubmit = (values) => {
-        setParams(values);
+        const query = queryString.stringify(values, {
+            arrayFormat: 'comma',
+            skipEmptyString: true
+        });
+        history.push(`/comics${query !== '' ? `?${query}` : ''}`);
     };
 
     const handleClear = () => {
-        setParams(initialState);
+        history.push(`/comics`);
     };
 
     return (
         <div>
-            <ComicsSearchForm handleSubmit={handleSubmit} handleClear={handleClear}/>
-            <ComicsGrid params={params}/>
+            <ComicsSearchForm handleSubmit={handleSubmit} handleClear={handleClear} />
+            <ComicsGrid params={{
+                titleStartsWith,
+                format,
+                issueNumber
+            }} />
         </div>
     );
 }
