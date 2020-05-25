@@ -119,14 +119,16 @@ export default function CharacterAdvancedSearchForm({ open, handleSubmit, handle
                         style={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Comic" variant="outlined" />}
                         onChange={(event, newValue) => {
+                            console.log(newValue);
+                            if(newValue !== null){
                             const { length } = formik.values.comics.filter(
-                                c => c.title !== comic.title
+                                c => c.id === newValue.id
                             );
-                            if (newValue !== null) {
-                                if (length === 0) {
-                                    formik.setFieldValue('comics', [...formik.values.comics, newValue]);
-                                }
+                            if (length === 0) {
+                                formik.setFieldValue('comics', [...formik.values.comics, newValue]);
                             }
+                            
+                        }
                         }}
                         onInputChange={(event) => {
                             if (typeof event.target.value !== 'number') {
